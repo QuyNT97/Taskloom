@@ -1,11 +1,11 @@
 # Built-in plugins (Phase 4)
 
-Policies live in `@task-engine/plugins`, which imports only public core exports.
-`@task-engine/core` contains no retry, timeout, priority or FIFO branches.
+Policies live in `@yuqgnort/taskloom-plugins`, which imports only public kernel exports.
+`@yuqgnort/taskloom` contains no retry, timeout, priority or FIFO branches.
 
 ```ts
-import { TaskRuntime } from '@task-engine/core';
-import { fifo, concurrency, timeout, retry } from '@task-engine/plugins';
+import { TaskRuntime } from '@yuqgnort/taskloom';
+import { fifo, concurrency, timeout, retry } from '@yuqgnort/taskloom-plugins';
 
 type Input = { value: number };
 const runtime = new TaskRuntime<Input, number>({
@@ -26,8 +26,8 @@ runtime.destroy();
 ```
 
 This is the advanced runtime API; specify input/result generics once when composing
-policies. Its factories then receive those types contextually. The beginner facade
-and automatic inference across inline generic plugin factories are Phase 5 work.
+policies. `createTaskEngine` provides the beginner API, infers types from its
+worker and adds FIFO when no selection plugin is present.
 Policies are a separate package to preserve a one-way dependency on core.
 
 ## Selection: FIFO or priority

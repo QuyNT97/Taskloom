@@ -1,11 +1,12 @@
 # Runtime (Phase 3)
 
-`TaskRuntime` is the advanced execution primitive. The simple `createTaskEngine`
-facade is reserved for Phase 5. The runtime owns state publication, live worker
-executions, AbortControllers and handles; policy belongs to plugins.
+`TaskRuntime` is the advanced execution primitive. Most users should begin with
+`createTaskEngine`, which adds defaults and subscriptions. The runtime owns state
+publication, live worker executions, AbortControllers and handles; policy belongs
+to plugins.
 
 ```ts
-import { TaskRuntime, definePlugin, PluginKey } from '@task-engine/core';
+import { TaskRuntime, definePlugin, PluginKey } from '@yuqgnort/taskloom';
 
 const selection = definePlugin<number, number, undefined>({
   key: new PluginKey<undefined>('example-selection'),
@@ -55,9 +56,8 @@ core retains only active records. Unobserved handle rejections are internally
 handled without changing the original promise's rejection for awaiters.
 
 Use explicit input/result generics on the advanced TaskRuntime when composing
-inline policy factories; these factories must not widen the worker result type.
-Beginner inference is reserved for the Phase 5 facade. Workers may
-return a value, promise or thenable. Context includes taskId, executionId, signal,
+inline policy factories. `createTaskEngine` infers both from its worker. Workers
+may return a value, promise or thenable. Context includes taskId, executionId, signal,
 attempt and startedAt. Attempt counts committed starts within one logical handle.
 
 Handles settle after all accepted appends. A fail/complete followed by reenqueue

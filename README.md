@@ -1,20 +1,24 @@
 # Task Engine
 
-An extensible async task execution engine with transactional state and a
-plugin-first architecture. Inspired by ProseMirror's architecture; unaffiliated
-with ProseMirror.
+[![CI](https://github.com/QuyNT97/Taskloom/actions/workflows/ci.yml/badge.svg)](https://github.com/QuyNT97/Taskloom/actions/workflows/ci.yml)
 
-**Current scope: Phases 1–4 complete.** Immutable state, transaction pipeline,
-execution runtime and the six initial policy plugins are implemented. The
-`createTaskEngine` facade, subscriptions and final beginner DX belong to Phase 5.
+An extensible async task execution engine with transactional state and a
+plugin-first architecture.
+
+```sh
+npm install @yuqgnort/taskloom
+```
+
+**The v0.1 scope is complete.** Immutable state, the transaction pipeline,
+runtime, six policy plugins, subscriptions and the beginner facade are implemented.
 
 ```ts
-import { TaskRuntime } from '@task-engine/core';
-import { fifo, concurrency, timeout, retry } from '@task-engine/plugins';
+import {
+  createTaskEngine, fifo, concurrency, timeout, retry,
+} from '@yuqgnort/taskloom';
 
-type Input = { value: number };
-const runtime = new TaskRuntime<Input, number>({
-  worker: async (input, ctx) => {
+const engine = createTaskEngine({
+  worker: async (input: { value: number }, ctx) => {
     if (ctx.attempt === 1) throw new Error('Transient failure');
     return input.value * 2;
   },
@@ -23,21 +27,26 @@ const runtime = new TaskRuntime<Input, number>({
     retry({ maxAttempts: 3 }),
   ],
 });
-const handle = runtime.add({ value: 21 });
+const handle = engine.add({ value: 21 });
 const result = await handle.result; // 42
-runtime.destroy();
+engine.destroy();
 ```
 
-TaskRuntime is the advanced API. Explicit input/result generics preserve typing
-across plugin composition; automatic beginner inference is a Phase 5 deliverable.
-Use exactly one selection policy: FIFO or priority. Other policies compose through
-admission, pure transactions and runtime hooks. A cancelled worker that ignores
-AbortSignal still occupies physical capacity until its promise settles.
+The worker parameter and awaited return determine input and result types. FIFO is
+added automatically when no selector is supplied. Use priority instead when
+required; providing two selectors is an error. Other policies compose through
+admission, transactions and runtime hooks. A cancelled worker that ignores
+AbortSignal occupies physical capacity until its promise settles.
+
+`addMany()` enqueues atomically. Pause/resume are transactional and let running
+work finish. `clear()` cancels the active set in one transaction. `subscribe()`
+reports future committed snapshots after the complete filter/reduce/append
+pipeline and returns an idempotent unsubscribe function.
 
 The pure API remains available independently:
 
 ```ts
-import { TaskState } from '@task-engine/core';
+import { TaskState } from '@yuqgnort/taskloom';
 
 const state = TaskState.create<number, number>();
 const result = state.applyTransaction(
@@ -59,6 +68,8 @@ Documentation:
 - [Writing a state plugin](docs/writing-a-plugin.md)
 - [Runtime, cancellation and lifecycle](docs/runtime.md)
 - [Built-in plugins and composition](docs/built-in-plugins.md)
+- [Engine facade and subscriptions](docs/engine.md)
+- [Release checklist](docs/releasing.md)
 
 Requires Node.js 20+ for development and TypeScript 5.4+ for the published types.
 Core uses platform promises, AbortController and timers, with no Node.js imports.
@@ -69,5 +80,10 @@ npm run typecheck
 npm test
 ```
 
-The monorepo builds `@task-engine/core` and `@task-engine/plugins` with project
-references. Built-in policies import only the core package's public API.
+The `@yuqgnort/taskloom` entry exports the facade, advanced kernel and policies.
+Internally, policy-free `@yuqgnort/taskloom-kernel` sits below
+`@yuqgnort/taskloom-plugins`,
+so policies never receive privileged engine access. See the runnable
+[basic example](examples/basic.ts) and [custom plugin example](examples/custom-plugin.ts).
+
+Released under the [MIT License](LICENSE).

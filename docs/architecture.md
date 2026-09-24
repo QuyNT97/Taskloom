@@ -1,6 +1,6 @@
-# Architecture — Phases 1–4
+# Architecture — v0.1 (Phases 1–5)
 
-Status: domain, transaction pipeline, execution runtime and built-in policies implemented.
+Status: the initial specification is implemented through Phase 5.
 The original requirements live in [initial-spec.md](initial-spec.md).
 
 ## Transactions and snapshots
@@ -60,8 +60,9 @@ conservative in this phase; structural sharing optimization needs benchmarks.
 an immutable `{ state, transactions }`. `state.apply(root, options?)` returns only
 that final state. The single-transaction reducer is private, so callers cannot
 accidentally bypass filters. This extends Phase 1's public `apply` behavior;
-applications without transaction hooks behave as before. `TaskRuntime.dispatch` publishes the final result atomically; the beginner facade
-is reserved for Phase 5.
+applications without transaction hooks behave as before. `TaskRuntime.dispatch`
+publishes the final result atomically; `createTaskEngine` exposes it through the
+beginner facade.
 
 Processing follows these rules:
 
@@ -114,7 +115,7 @@ or mutation of borrowed payloads. Synchronous return shapes are checked for
 JavaScript callers as well as enforced through TypeScript.
 
 Architecture tests define dedupe and task-counter plugins outside core and
-import only `@task-engine/core`. They cover atomic batch rejection, running-task
+import only `@yuqgnort/taskloom`. They cover atomic batch rejection, running-task
 dedupe, appended duplicate rejection, and accepted-only state updates. Pipeline
 tests cover precise unseen batches, cursor snapshots, metadata-only appends,
 origin filtering, stale snapshots, exception atomicity and loop budgets.
@@ -135,9 +136,35 @@ clock callbacks can wake scheduling or dispatch transactions. These primitives
 have external-plugin tests for selection, admission, timer failure and reenqueue.
 
 See [Runtime](runtime.md) for cancellation, error handling, teardown, publication,
-handle continuity and the exact synchronous hook contract. The six [built-in policies](built-in-plugins.md) live in a separate package and
-use only public extension points. The beginner facade and subscriptions remain
-Phase 5.
+handle continuity and the exact synchronous hook contract. The six
+[built-in policies](built-in-plugins.md) live in a separate package and use only
+public extension points.
+
+## Engine facade and subscriptions (Phase 5)
+
+`createTaskEngine` infers input and awaited result from its worker. Built-in
+policy factories remain generic until engine construction, then specialize to
+those types. Input-specific factories carry a type-only constraint so a policy
+cannot inspect unrelated worker input. Ordinary `definePlugin` values retain
+their exact input/result contract. When no plugin supplies selection, the facade
+adds FIFO. More than one selector still fails during runtime initialization.
+
+The facade delegates execution to TaskRuntime and adds `addMany`, pause, resume,
+clear and subscribe. Batch enqueue is one transaction: filters accept all inputs
+or every returned handle rejects. Pause is plugin-owned state and blocks automatic
+and manually dispatched starts. It does not cancel running work. Clear emits one
+cancellation transaction for the active set and remains subject to normal filters.
+
+Subscriptions observe future successful commits. One dispatch produces one
+notification containing the final snapshot after all appends, never speculative
+intermediate state. Delivery is deferred with runtime effects, ordered by commit
+and non-recursive. Membership is captured at commit; unsubscribing before delivery
+suppresses that callback. Listener failures are reported through `onError`, do not
+destroy the runtime and do not prevent later listeners. Destroy clears listeners.
+
+The package graph is one-way: policy-free `@yuqgnort/taskloom-kernel`, then
+`@yuqgnort/taskloom-plugins`, then the public `@yuqgnort/taskloom` composition entry.
+Core re-exports kernel and policies so beginner usage needs one import.
 
 Core owns domain transitions, snapshots, execution and generic extension points.
 Plugins own scheduling order, concurrency, retries, timeouts, retention and

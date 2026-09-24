@@ -6,7 +6,7 @@ The project should not be designed as a traditional queue library.
 
 The main idea is:
 
-> A small async execution kernel with a transactional state model and a highly extensible plugin architecture inspired by ProseMirror.
+> A small async execution kernel with a transactional state model and a highly extensible plugin architecture.
 
 The main strength of the library must be extensibility.
 
@@ -29,20 +29,9 @@ The architecture should follow these principles:
 9. Beginner API should remain simple.
 10. Advanced users should have access to state, transactions, plugin APIs, and runtime hooks.
 
-Mental model:
+Core concepts:
 
 ```text
-ProseMirror
-
-EditorState
-Transaction
-Plugin
-PluginKey
-EditorView
-dispatch()
-
-↓
-
 Task Engine
 
 TaskState
@@ -168,7 +157,7 @@ import {
   concurrency,
   retry,
   timeout,
-} from '@task-engine/core';
+} from '@yuqgnort/taskloom';
 
 const engine = createTaskEngine({
   worker: async (input, ctx) => {
@@ -401,7 +390,7 @@ A transaction may contain multiple steps.
 
 # 9. PluginKey
 
-Implement a strongly typed plugin key inspired by ProseMirror.
+Implement a strongly typed plugin key.
 
 Example:
 
@@ -1154,7 +1143,7 @@ Avoid implicit shared mutable objects.
 
 # 23. Transaction meta
 
-Support metadata similar to ProseMirror.
+Support typed transaction metadata addressed by plugin keys.
 
 Example:
 
@@ -1214,7 +1203,7 @@ Use safeguards such as:
 * maximum append cycles
 * detect transaction identity/version
 
-Follow the conceptual behavior of ProseMirror without copying implementation blindly.
+Keep append processing deterministic and bounded.
 
 ---
 
@@ -1758,8 +1747,6 @@ Or:
 
 > A programmable async execution kernel for JavaScript and TypeScript.
 
-Mention inspiration from ProseMirror's architecture, but do not imply affiliation.
-
 ---
 
 # 40. Initial implementation scope
@@ -2073,7 +2060,7 @@ while also allowing an advanced third-party developer to create:
 import {
   definePlugin,
   PluginKey,
-} from '@task-engine/core';
+} from '@yuqgnort/taskloom';
 
 export const
   adaptiveConcurrency =

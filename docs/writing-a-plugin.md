@@ -11,7 +11,7 @@ by transactions. Keys use object identity, so export the key if other packages
 need to participate in the protocol.
 
 ```ts
-import { definePlugin, PluginKey, TaskState } from '@task-engine/core';
+import { definePlugin, PluginKey, TaskState } from '@yuqgnort/taskloom';
 
 const countKey = new PluginKey<number, { added: number }>('enqueue-count');
 const counter = definePlugin({
@@ -84,3 +84,26 @@ and must also be treated as immutable.
 
 See the [pipeline contract](architecture.md#transaction-pipeline-phase-2) for
 ordering, cursor behavior and `maxAppendedTransactions`.
+
+## Reusable policy factories
+
+Use `definePlugin` when a plugin targets known input/result types. A policy that
+does not depend on the worker result can use `definePluginFactory`; the engine
+specializes it after worker inference and creates a fresh plugin per engine.
+
+```ts
+import {
+  definePlugin, definePluginFactory, PluginKey,
+} from '@yuqgnort/taskloom';
+
+export const allowAll = () => definePluginFactory(
+  <Input, Result>() => definePlugin<Input, Result, undefined>({
+    key: new PluginKey<undefined>('allow-all'),
+    filterTransaction: () => true,
+  }),
+);
+```
+
+Mutable runtime resources still belong in the per-runtime instance returned by
+`runtime.setup`; never close over shared timers or controllers in the factory
+object itself.
