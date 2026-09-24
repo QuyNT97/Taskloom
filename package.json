@@ -1,14 +1,23 @@
 {
   "name": "task-engine-workspace",
   "private": true,
+  "description": "An extensible async task execution engine with transactional state and a plugin-first architecture.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuyNT97/Taskloom.git"
+  },
   "type": "module",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
+    "clean": "tsc -b packages/core --clean",
     "build": "tsc -b packages/core",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "npm run build && node --test tests/*.test.mjs"
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "check": "npm run clean && npm run typecheck && npm test",
+    "pack:check": "npm pack --dry-run --workspace @yuqgnort/taskloom-kernel && npm pack --dry-run --workspace @yuqgnort/taskloom-plugins && npm pack --dry-run --workspace @yuqgnort/taskloom"
   },
   "devDependencies": {
     "typescript": "5.9.3"
