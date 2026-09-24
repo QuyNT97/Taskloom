@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   TaskRuntime, PluginKey, definePlugin, TaskCancelledError,
   EngineDestroyedError, TransactionRejectedError,
-} from '@task-engine/core';
+} from '@yuqgnort/taskloom';
 
 const plugin = (name, spec) => definePlugin({ key: new PluginKey(name), ...spec });
 const selector = () => plugin('test-selection', { scheduling: { pickNext: (_, candidates) => candidates[0] } });

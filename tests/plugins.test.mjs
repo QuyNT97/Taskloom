@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { TaskRuntime, TaskState, PluginKey, definePlugin, TaskCancelledError, EngineDestroyedError } from '@task-engine/core';
-import { fifo, concurrency, priority, timeout, TaskTimeoutError, retry, retryKey, latestBy } from '@task-engine/plugins';
+import { TaskRuntime, TaskState, PluginKey, definePlugin, TaskCancelledError, EngineDestroyedError } from '@yuqgnort/taskloom';
+import { fifo, concurrency, priority, timeout, TaskTimeoutError, retry, retryKey, latestBy } from '@yuqgnort/taskloom-plugins';
 
 function deferred() {
   let resolve, reject;

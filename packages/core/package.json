@@ -1,9 +1,23 @@
 {
-  "name": "@task-engine/core",
+  "name": "@yuqgnort/taskloom",
   "version": "0.1.0",
+  "description": "Public facade for an extensible async task engine with transactional state and composable policies.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuyNT97/Taskloom.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/QuyNT97/Taskloom#readme",
+  "bugs": "https://github.com/QuyNT97/Taskloom/issues",
   "type": "module",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "files": [
-    "dist"
+    "dist/index.d.ts",
+    "dist/index.js",
+    "dist/engine.d.ts",
+    "dist/engine.js"
   ],
   "exports": {
     ".": {
@@ -13,7 +27,13 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@task-engine/kernel": "0.1.0",
-    "@task-engine/plugins": "0.1.0"
+    "@yuqgnort/taskloom-kernel": "0.1.0",
+    "@yuqgnort/taskloom-plugins": "0.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,5 +1,5 @@
 // These test-only plugins use the package export, with no core-internal imports.
-import { definePlugin, PluginKey } from '@task-engine/core';
+import { definePlugin, PluginKey } from '@yuqgnort/taskloom';
 
 export function dedupeBy(getKey) {
   return definePlugin({

@@ -1,7 +1,18 @@
 {
-  "name": "@task-engine/plugins",
+  "name": "@yuqgnort/taskloom-plugins",
   "version": "0.1.0",
+  "description": "Composable scheduling, concurrency, timeout, retry, priority and latest-task policies for Task Engine.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuyNT97/Taskloom.git",
+    "directory": "packages/plugins"
+  },
+  "homepage": "https://github.com/QuyNT97/Taskloom#readme",
+  "bugs": "https://github.com/QuyNT97/Taskloom/issues",
   "type": "module",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "files": [
     "dist"
   ],
@@ -13,6 +24,12 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@task-engine/kernel": "0.1.0"
+    "@yuqgnort/taskloom-kernel": "0.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -10,19 +10,20 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@task-engine/core": [
+      "@yuqgnort/taskloom": [
         "packages/core/src/index.ts"
       ],
-      "@task-engine/plugins": [
+      "@yuqgnort/taskloom-plugins": [
         "packages/plugins/src/index.ts"
       ],
-      "@task-engine/kernel": [
+      "@yuqgnort/taskloom-kernel": [
         "packages/kernel/src/index.ts"
       ]
     }
   },
   "include": [
     "packages/*/src/**/*.ts",
-    "tests/**/*.ts"
+    "tests/**/*.ts",
+    "examples/**/*.ts"
   ]
 }

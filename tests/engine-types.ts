@@ -2,7 +2,7 @@ import {
   createTaskEngine, fifo, concurrency, retry, timeout, latestBy, priority,
   definePlugin, definePluginFactory, PluginKey,
   type TaskEngine, type TaskHandle, type TaskContext, type TaskEngineOptions, type Task,
-} from '@task-engine/core';
+} from '@yuqgnort/taskloom';
 
 const simple = createTaskEngine({
   worker: async (input: { userId: string }, ctx) => {

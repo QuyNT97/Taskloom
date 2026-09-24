@@ -4,9 +4,9 @@ import {
   createTaskEngine, fifo, priority, concurrency, retry, timeout, latestBy,
   definePlugin, definePluginFactory, PluginKey, TaskRuntime, TaskState,
   TaskCancelledError, TransactionRejectedError, EngineDestroyedError,
-} from '@task-engine/core';
-import * as kernel from '@task-engine/kernel';
-import * as policies from '@task-engine/plugins';
+} from '@yuqgnort/taskloom';
+import * as kernel from '@yuqgnort/taskloom-kernel';
+import * as policies from '@yuqgnort/taskloom-plugins';
 
 async function flush() { for (let i = 0; i < 40; i++) await Promise.resolve(); }
 function deferred() {

@@ -1,4 +1,4 @@
-import { definePlugin, definePluginFactory, PluginKey, type Task, type TaskPluginFactory } from '@task-engine/kernel';
+import { definePlugin, definePluginFactory, PluginKey, type Task, type TaskPluginFactory } from '@yuqgnort/taskloom-kernel';
 
 export function fifo<I = never>(): TaskPluginFactory<I> {
   return definePluginFactory<I>(<Input, Result>() => definePlugin<Input, Result, undefined>({

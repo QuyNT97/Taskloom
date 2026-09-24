@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   TaskState, PluginKey, definePlugin, AppendTransactionLimitError,
-} from '@task-engine/core';
+} from '@yuqgnort/taskloom';
 import { dedupeBy, taskCounter } from './fixtures/external-plugins.mjs';
 
 const task = (id, key = id) => ({ id, input: { key }, createdAt: 0 });

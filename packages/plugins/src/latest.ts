@@ -1,4 +1,4 @@
-import { definePlugin, definePluginFactory, PluginKey, type Task, type TaskPluginFactory } from '@task-engine/kernel';
+import { definePlugin, definePluginFactory, PluginKey, type Task, type TaskPluginFactory } from '@yuqgnort/taskloom-kernel';
 
 export interface LatestOptions {
   /** Default false: replace pending tasks only. */

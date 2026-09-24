@@ -2,8 +2,8 @@ import {
   definePlugin, instantiatePlugins, PluginKey, TaskRuntime, EngineDestroyedError,
   type TaskState, type TaskTransaction, type TaskHandle,
   type TaskRuntimeOptions, type TaskPluginSource, type ApplyTransactionResult, type AddTaskOptions,
-} from '@task-engine/kernel';
-import { fifo } from '@task-engine/plugins';
+} from '@yuqgnort/taskloom-kernel';
+import { fifo } from '@yuqgnort/taskloom-plugins';
 
 export interface TaskEngine<I, R> {
   readonly state: TaskState<I, R>;

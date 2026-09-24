@@ -1,5 +1,5 @@
 import { definePlugin, PluginKey, TaskState, TaskRuntime, type ApplyTransactionResult, type TaskHandle, type RuntimeClock } from '../packages/core/src/index.js';
-import { fifo, concurrency, timeout, retry, priority, latestBy, retryKey } from '@task-engine/plugins';
+import { fifo, concurrency, timeout, retry, priority, latestBy, retryKey } from '@yuqgnort/taskloom-plugins';
 const key = new PluginKey<number, { increment: number }>('counter');
 const plugin = definePlugin({ key, state: { init: () => 0, apply: (tr, value) => value + (tr.getMeta(key)?.increment ?? 0) } });
 const state = TaskState.create({ plugins: [plugin] });

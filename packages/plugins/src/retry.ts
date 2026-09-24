@@ -1,7 +1,7 @@
 import {
   definePlugin, definePluginFactory, PluginKey, TransactionRejectedError,
   type Task, type TaskPluginFactory, type TaskTransaction,
-} from '@task-engine/kernel';
+} from '@yuqgnort/taskloom-kernel';
 import { MAX_TIMER_DELAY } from './timeout.js';
 
 export interface RetryEntry {

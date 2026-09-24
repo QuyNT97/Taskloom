@@ -1,4 +1,4 @@
-import { definePlugin, definePluginFactory, PluginKey, TransactionRejectedError, type TaskPluginFactory } from '@task-engine/kernel';
+import { definePlugin, definePluginFactory, PluginKey, TransactionRejectedError, type TaskPluginFactory } from '@yuqgnort/taskloom-kernel';
 
 export const MAX_TIMER_DELAY = 2_147_483_647;
 
