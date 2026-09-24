@@ -9,11 +9,11 @@ export class TaskTimeoutError extends Error {
   }
 }
 
-export function timeout<I = unknown>(milliseconds: number): TaskPluginFactory<I> {
+export function timeout<I = never>(milliseconds: number): TaskPluginFactory<I> {
   if (!Number.isFinite(milliseconds) || milliseconds < 0 || milliseconds > MAX_TIMER_DELAY) {
     throw new RangeError(`timeout must be between 0 and ${MAX_TIMER_DELAY} milliseconds`);
   }
-  return definePluginFactory<I>(<Input extends I, Result>() => definePlugin<Input, Result, undefined>({
+  return definePluginFactory<I>(<Input, Result>() => definePlugin<Input, Result, undefined>({
     key: new PluginKey<undefined>('timeout'),
     runtime: {
       onTaskStart(ctx) {

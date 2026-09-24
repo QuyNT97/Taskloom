@@ -64,7 +64,7 @@ function failedTasks<I, R>(transactions: readonly TaskTransaction<I, R>[]) {
   return failures;
 }
 
-export function retry<I = unknown>(options: RetryOptions<I>): TaskPluginFactory<I> {
+export function retry<I = never>(options: RetryOptions<I>): TaskPluginFactory<I> {
   const { maxAttempts, shouldRetry } = options;
   const backoff = options.backoff ? Object.freeze({ ...options.backoff }) : undefined;
   if (!Number.isSafeInteger(maxAttempts) || maxAttempts < 1) throw new RangeError('maxAttempts must be a positive safe integer');
@@ -76,7 +76,7 @@ export function retry<I = unknown>(options: RetryOptions<I>): TaskPluginFactory<
   const getDelay = (attempt: number): number => !backoff || backoff.base === 0 ? 0
     : Math.min(backoff.max ?? MAX_TIMER_DELAY, backoff.base * (backoff.type === 'exponential' ? 2 ** (attempt - 1) : 1));
 
-  return definePluginFactory<I>(<Input extends I, Result>() => definePlugin<Input, Result, RetryState, RetryMeta>({
+  return definePluginFactory<I>(<Input, Result>() => definePlugin<Input, Result, RetryState, RetryMeta>({
     key: retryKey,
     state: {
       init: () => new Map(),
@@ -112,7 +112,9 @@ export function retry<I = unknown>(options: RetryOptions<I>): TaskPluginFactory<
       for (const [id, failed] of failedTasks(transactions)) {
         const entry = failed.entry;
         if (newState.pending.some(task => task.id === id) || newState.running.has(id)) continue;
-        const allowed = entry.attempt < maxAttempts && (shouldRetry ? shouldRetry(failed.error, { task: failed.task, attempt: entry.attempt }) : true);
+        const allowed = entry.attempt < maxAttempts && (shouldRetry ? shouldRetry(failed.error, {
+          task: failed.task as unknown as Task<I>, attempt: entry.attempt,
+        }) : true);
         if (typeof allowed !== 'boolean') throw new TypeError('shouldRetry must return a synchronous boolean');
         if (allowed) {
           tr = tr.enqueue(failed.task);

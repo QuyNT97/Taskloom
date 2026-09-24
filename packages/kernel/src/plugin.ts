@@ -46,15 +46,15 @@ export interface TaskPlugin<I = unknown, R = unknown> extends TaskPluginExtensio
 declare const factoryInput: unique symbol;
 
 /** A policy can be specialized for any worker result without erasing its types. */
-export interface TaskPluginFactory<I = unknown> {
+export interface TaskPluginFactory<I = never> {
   /** Type-only input constraint; broad policies accept narrower worker inputs. */
-  readonly [factoryInput]?: (input: I) => void;
-  readonly create: <Input extends I, Result>() => TaskPlugin<Input, Result>;
+  readonly [factoryInput]?: I;
+  readonly create: <Input, Result>() => TaskPlugin<Input, Result>;
 }
 
 export type TaskPluginSource<I, R> = TaskPlugin<I, R> | TaskPluginFactory<I>;
 
-export function definePluginFactory<I = unknown>(create: TaskPluginFactory<I>['create']): TaskPluginFactory<I> {
+export function definePluginFactory<I = never>(create: TaskPluginFactory<I>['create']): TaskPluginFactory<I> {
   return Object.freeze({ create });
 }
 
