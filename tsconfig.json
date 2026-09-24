@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@task-engine/core": [
+        "packages/core/src/index.ts"
+      ],
+      "@task-engine/plugins": [
+        "packages/plugins/src/index.ts"
+      ],
+      "@task-engine/kernel": [
+        "packages/kernel/src/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "packages/*/src/**/*.ts",
+    "tests/**/*.ts"
+  ]
+}

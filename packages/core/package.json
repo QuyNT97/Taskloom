@@ -1,0 +1,19 @@
+{
+  "name": "@task-engine/core",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@task-engine/kernel": "0.1.0",
+    "@task-engine/plugins": "0.1.0"
+  }
+}
